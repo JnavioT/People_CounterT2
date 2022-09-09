@@ -6,7 +6,7 @@ People Counting in Real-Time using live video stream/IP camera in OpenCV.
 > Refer to added [Features](#features). Also, added support for an IP camera.
 
 <div align="center">
-<img src=https://imgur.com/SaF1kk3.gif" width=550>
+<img src="demo.gif" width=550>
 <p>Live demo</p>
 </div>
 
@@ -47,6 +47,10 @@ pip install -r requirements.txt
 - To run inference on a test video file, head into the directory/use the command: 
 ```
 python run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4
+```
+- To run inference on a test video file and save video, head into the directory/use the command: 
+```
+python run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4 --output videos_out/video_out.avi
 ```
 > To run inference on an IP camera:
 - Setup your camera url in 'mylib/config.py':
@@ -131,23 +135,6 @@ if Timer:
 
 ---
 
-## Thanks for the read & have fun!
+Based on :
+https://github.com/ShivamPrajapati2001/People_Counter
 
-> To get started/contribute quickly (optional) ...
-
-- **Option 1**
-    - 🍴 Fork this repo and pull request!
-
-- **Option 2**
-    - 👯 Clone this repo:
-    ```
-    $ git clone https://github.com/ShivamPrajapati2001/People_Counter.git
-    ```
-
-- **Roll it!**
-
----
-
-shivam_prajapati/ 08-08-2021 © <a href="https://github.com/ShivamPrajapati2001" target="_blank">Shivam Prajapati</a>.
-
-akansha-daiya/ 08-08-2021 © <a href="https://github.com/Akansha-Daiya" target="_blank">Akansha Daiya</a>.
