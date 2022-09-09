@@ -25,7 +25,7 @@ def run():
 	ap.add_argument("-o", "--output", type=str,
 		help="path to optional output video file")
 	# confidence default 0.4
-	ap.add_argument("-c", "--confidence", type=float, default=0.4,
+	ap.add_argument("-c", "--confidence", type=float, default=0.6,
 		help="minimum probability to filter weak detections")
 	ap.add_argument("-s", "--skip-frames", type=int, default=30,
 		help="# of skip frames between detections")
@@ -129,13 +129,12 @@ def run():
 			blob = cv2.dnn.blobFromImage(frame, 0.007843, (W, H), 127.5)
 			net.setInput(blob)
 			detections = net.forward()
-
+			
 			# loop over the detections
 			for i in np.arange(0, detections.shape[2]):
 				# extract the confidence (i.e., probability) associated
 				# with the prediction
 				confidence = detections[0, 0, i, 2]
-
 				# filter out weak detections by requiring a minimum
 				# confidence
 				if confidence > args["confidence"]:
@@ -189,9 +188,9 @@ def run():
 		# draw a horizontal line in the center of the frame -- once an
 		# object crosses this line we will determine whether they were
 		# moving 'up' or 'down'
-		cv2.line(frame, (0, H // 2), (W, H // 2), (0, 0, 0), 3)
-		cv2.putText(frame, "-Prediction border - Entrance-", (10, H - ((i * 20) + 200)),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+		cv2.line(frame, (0, H // 3), (W, H // 3),  color=(255, 255, 255), thickness=5)
+		cv2.putText(frame, "-Prediction border - Entrance-", (30, H - ((i * 20) + 200)),
+			cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
 		# use the centroid tracker to associate the (1) old object
 		# centroids with (2) the newly computed object centroids
@@ -223,7 +222,7 @@ def run():
 					# if the direction is negative (indicating the object
 					# is moving up) AND the centroid is above the center
 					# line, count the object
-					if direction < 0 and centroid[1] < H // 2:
+					if direction < 0 and centroid[1] < H // 3:
 						totalUp += 1
 						empty.append(totalUp)
 						to.counted = True
@@ -231,7 +230,7 @@ def run():
 					# if the direction is positive (indicating the object
 					# is moving down) AND the centroid is below the
 					# center line, count the object
-					elif direction > 0 and centroid[1] > H // 2:
+					elif direction > 0 and centroid[1] > H // 3:
 						totalDown += 1
 						empty1.append(totalDown)
 						#print(empty1[-1])
@@ -276,7 +275,7 @@ def run():
                 # Display the output
 		for (i, (k, v)) in enumerate(info):
 			text = "{}: {}".format(k, v)
-			cv2.putText(frame, text, (10, H - ((i * 20) + 20)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+			cv2.putText(frame, text, (10, H - ((i * 20) + 20)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
 		for (i, (k, v)) in enumerate(info2):
 			text = "{}: {}".format(k, v)
@@ -306,6 +305,9 @@ def run():
 		# then update the FPS counter
 		totalFrames += 1
 		fps.update()
+
+		if args["output"] is not None:
+			writer.write(frame.astype(np.uint8))
 
 		if config.Timer:
 			# Automatic timer to stop the live stream. Set to 8 hours (28800s).
